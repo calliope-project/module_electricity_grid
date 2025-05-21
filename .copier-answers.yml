@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: latest
+_src_path: https://github.com/calliope-project/data-module-template.git
+author_email: j.a.c.launer@tudelft.nl
+author_family_name: Launer
+author_given_name: Jann
+github_org: calliope-project
+license: MIT
+module_description: This module prepares electricity grid capacities for Europe at
+    different spatial resolutions.
+module_long_name: Electricity grid capacities
+module_short_name: module_electricity_grid
