@@ -2,6 +2,7 @@ import pypsa
 import geopandas as gpd
 from shapely import LineString
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 
 def get_bus_coords(bus, shapes):
@@ -11,6 +12,7 @@ def get_bus_coords(bus, shapes):
     if len(shape) > 1:
         raise ValueError(f"More than one region for bus {bus} found")
     
+    # TODO: Project to appropriate CRS before computing centroid
     coords = shape.geometry.centroid.iloc[0]
     return coords
 
@@ -44,3 +46,10 @@ if __name__ == "__main__":
     lines.to_csv(snakemake.output.lines_table)  # here / "data" / "lines.csv")
 
     gdf_lines.to_file(snakemake.output.lines_geo)  # here / "data" / "lines.geojson", driver="GeoJSON")
+
+    # save as plot
+    fig, ax = plt.subplots()
+    shapes.to_crs("EPSG:3035").boundary.plot(ax=ax, color="black", linewidth=0.1, alpha=0.2)
+    gdf_lines.to_crs("EPSG:3035").geometry.plot(ax=ax, linewidth=gdf_lines["s_nom"]*2e-4, color="red", alpha=0.5)
+    plt.savefig(snakemake.output.lines_plot, dpi=300)
+    plt.close()

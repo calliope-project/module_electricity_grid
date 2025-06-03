@@ -7,6 +7,7 @@ rule prepare_lines:
     output:
         lines_table="results/lines.csv",
         lines_geo="results/lines.geojson",
+        lines_plot="results/lines.png"
     log:
         "logs/prepare_lines.log",
     conda:
