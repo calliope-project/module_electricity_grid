@@ -1,0 +1,6 @@
+name: pypsa
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pypsa
