@@ -1,4 +1,4 @@
-rule prepare_lines:
+rule prepare_lines_and_links:
     message:
         "Get lines from PyPSA network."
     input:
@@ -6,14 +6,16 @@ rule prepare_lines:
         shapes="resources/user/shapes.geojson",
     output:
         lines_table="results/lines.csv",
+        links_table="results/links.csv",
         lines_geo="results/lines.geojson",
+        links_geo="results/links.geojson",
         lines_plot="results/lines.png"
     log:
-        "logs/prepare_lines.log",
+        "logs/prepare_lines_and_links.log",
     conda:
         "../envs/pypsa.yaml"
     script:
-        "../scripts/prepare_lines.py"
+        "../scripts/prepare_lines_and_links.py"
 
 
 rule prepare_ntc:

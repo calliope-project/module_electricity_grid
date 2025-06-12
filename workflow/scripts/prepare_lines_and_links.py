@@ -39,13 +39,16 @@ if __name__ == "__main__":
     
     # prepare lines and line geometries
     lines = n.lines
+    links = n.links
 
     gdf_lines = get_line_geometry(lines, shapes)
+    # TODO: use links geometry, which is type str currently.
 
     # save as csv and geojson
-    lines.to_csv(snakemake.output.lines_table)  # here / "data" / "lines.csv")
+    lines.to_csv(snakemake.output.lines_table)
+    links.to_csv(snakemake.output.links_table)
 
-    gdf_lines.to_file(snakemake.output.lines_geo)  # here / "data" / "lines.geojson", driver="GeoJSON")
+    gdf_lines.to_file(snakemake.output.lines_geo)
 
     # save as plot
     fig, ax = plt.subplots()
