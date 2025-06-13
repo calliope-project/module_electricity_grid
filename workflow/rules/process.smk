@@ -9,25 +9,10 @@ rule prepare_lines_and_links:
         links_table="results/links.csv",
         lines_geo="results/lines.geojson",
         links_geo="results/links.geojson",
-        lines_plot="results/lines.png"
+        lines_plot="results/lines_and_links.png"
     log:
         "logs/prepare_lines_and_links.log",
     conda:
         "../envs/pypsa.yaml"
     script:
         "../scripts/prepare_lines_and_links.py"
-
-
-rule prepare_ntc:
-    message:
-        "Prepare NTC from electrical properties of lines."
-    input:
-        lines="results/lines.csv",
-    output:
-        lines_ntc="results/lines_ntc.csv",
-    log:
-        "logs/prepare_ntc.log",
-    conda:
-        "../envs/pypsa.yaml"
-    script:
-        "../scripts/prepare_ntc.py"
