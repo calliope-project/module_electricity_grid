@@ -1,18 +1,17 @@
-rule prepare_lines_and_links:
+rule prepare_lines_links_buses:
     message:
-        "Get lines from PyPSA network."
+        "Get lines, links and buses from PyPSA network."
     input:
         network="resources/user/network.nc",
         shapes="resources/user/shapes.geojson",
     output:
-        lines_table="results/lines.csv",
-        links_table="results/links.csv",
-        lines_geo="results/lines.geojson",
-        links_geo="results/links.geojson",
-        lines_plot="results/lines_and_links.png"
+        lines="results/lines.parquet",
+        links="results/links.parquet",
+        buses="results/buses.parquet",
+        plot="results/electricity_grid.png"
     log:
-        "logs/prepare_lines_and_links.log",
+        "logs/prepare_lines_links_buses.log",
     conda:
         "../envs/pypsa.yaml"
     script:
-        "../scripts/prepare_lines_and_links.py"
+        "../scripts/prepare_lines_links_buses.py"
