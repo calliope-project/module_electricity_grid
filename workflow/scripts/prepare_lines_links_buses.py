@@ -34,6 +34,15 @@ if __name__ == "__main__":
     links = n.links
     buses = n.buses
 
+    # simplify bus names
+    def simplify_bus_name(name):
+        return name.replace("+", "_").replace("-", "_")
+    buses.index = buses.index.map(simplify_bus_name)
+    lines["bus0"] = lines["bus0"].map(simplify_bus_name)
+    lines["bus1"] = lines["bus1"].map(simplify_bus_name)
+    links["bus0"] = links["bus0"].map(simplify_bus_name)
+    links["bus1"] = links["bus1"].map(simplify_bus_name)
+
     # prepare geometries
     gdf_links = links.copy()
     gdf_links["geometry"] = gdf_links["geometry"].apply(wkt.loads)
