@@ -19,6 +19,7 @@ with open(workflow.source_path("internal/settings.yaml"), "r") as f:
 
 # Add all your includes here.
 include: "rules/process.smk"
+include: "rules/auxiliary.smk"
 
 
 rule all:

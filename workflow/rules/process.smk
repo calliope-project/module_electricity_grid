@@ -3,7 +3,8 @@ rule prepare_lines_links_buses:
         "Get lines, links and buses from PyPSA network."
     input:
         network="resources/user/network.nc",
-        shapes="resources/user/shapes.geojson",
+        shapes_onshore="resources/user/shapes_onshore.geojson",
+        shapes_offshore="resources/user/shapes_offshore.geojson",
     output:
         lines="results/lines.parquet",
         links="results/links.parquet",

@@ -27,7 +27,8 @@ def get_line_geometry(lines, buses):
 if __name__ == "__main__":
     # load network 
     n = pypsa.Network(snakemake.input.network)
-    shapes = gpd.read_file(snakemake.input.shapes)
+    shapes_onshore = gpd.read_file(snakemake.input.shapes_onshore)
+    shapes_offshore = gpd.read_file(snakemake.input.shapes_offshore)
     
     # extract lines, links, and buses
     lines = n.lines
@@ -61,7 +62,8 @@ if __name__ == "__main__":
     # save a plot
     CRS = "EPSG:3035"
     fig, ax = plt.subplots(figsize=(6, 6))
-    shapes.to_crs(CRS).boundary.plot(ax=ax, color="black", linewidth=0.1, alpha=0.2)
+    shapes_onshore.to_crs(CRS).boundary.plot(ax=ax, color="black", linewidth=0.1, alpha=0.2)
+    shapes_offshore.to_crs(CRS).boundary.plot(ax=ax, color="black", linewidth=0.1, alpha=0.2)
     gdf_buses.to_crs(CRS).geometry.plot(ax=ax, markersize=5, color="#700202", label="Buses")
     gdf_lines.to_crs(CRS).geometry.plot(ax=ax, linewidth=gdf_lines["s_nom"]*2e-4, color="#700202")
     gdf_links.to_crs(CRS).geometry.plot(ax=ax, linewidth=gdf_links["p_nom"]*2e-4, color="#6184AC")
