@@ -45,8 +45,7 @@ def main(
     path_lines_clean,
     path_links_clean,
     path_buses_clean,
-    path_shapes_onshore_clean,
-    path_shapes_offshore_clean,
+    path_shapes_clean,
     path_map_buses,
     path_map_countries
 ):
@@ -79,24 +78,27 @@ def main(
     def country_of_bus(bus):
         return buses.loc[bus, "country"] if bus in buses.index else None
 
-    shapes_onshore["name"] = shapes_onshore["name"].map(map_buses)
-    shapes_offshore["name"] = shapes_offshore["name"].map(map_buses)
-    shapes_onshore = shapes_onshore.rename(columns={"name": "shape_id"})
-    shapes_offshore = shapes_offshore.rename(columns={"name": "shape_id"})
-    shapes_onshore["country_id"] = shapes_onshore["shape_id"].map(country_of_bus)
-    shapes_offshore["country_id"] = shapes_offshore["shape_id"].map(country_of_bus)
     shapes_onshore["shape_class"] = "land"
     shapes_offshore["shape_class"] = "maritime"
+
+    shapes = pd.concat([shapes_onshore, shapes_offshore], ignore_index=True)
+    shapes = gpd.GeoDataFrame(shapes, geometry="geometry")
+
+    shapes["name"] = shapes["name"].map(map_buses)
+    shapes = shapes.rename(columns={"name": "shape_id"})
+    shapes["country_id"] = shapes["shape_id"].map(country_of_bus)
+
+    shapes.loc[shapes["shape_class"]=="land","shape_id"] += "_land"
+    shapes.loc[shapes["shape_class"]=="maritime","shape_id"] += "_maritime"
+
     columns = ["shape_id", "country_id", "shape_class", "geometry"]
-    shapes_onshore = shapes_onshore[columns]
-    shapes_offshore = shapes_offshore[columns]
+    shapes = shapes[columns]
 
     # Save cleaned data
     lines.to_parquet(path_lines_clean)
     links.to_parquet(path_links_clean)
     buses.to_parquet(path_buses_clean)
-    shapes_onshore.to_parquet(path_shapes_onshore_clean)
-    shapes_offshore.to_parquet(path_shapes_offshore_clean)
+    shapes.to_parquet(path_shapes_clean)
     save_yaml(map_buses, path_map_buses)
     save_yaml(map_countries, path_map_countries)
 
@@ -110,8 +112,7 @@ if __name__ == "__main__":
         snakemake.output.lines,
         snakemake.output.links,
         snakemake.output.buses,
-        snakemake.output.shapes_onshore,
-        snakemake.output.shapes_offshore,
+        snakemake.output.shapes,
         snakemake.output.buses_map,
         snakemake.output.country_map,
     )

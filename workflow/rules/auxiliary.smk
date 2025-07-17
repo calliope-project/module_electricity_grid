@@ -9,8 +9,7 @@ rule clean_outputs:
         lines="results/lines_clean.parquet",
         links="results/links_clean.parquet",
         buses="results/buses_clean.parquet",
-        shapes_onshore="results/shapes_onshore_clean.parquet",
-        shapes_offshore="results/shapes_offshore_clean.parquet",
+        shapes="results/shapes_clean.parquet",
         buses_map="results/buses_map.yaml",
         country_map="results/country_map.yaml",
     script:
