@@ -1,8 +1,8 @@
 rule clean_outputs:
     input:
-        lines="results/lines.parquet",
-        links="results/links.parquet",
-        buses="results/buses.parquet",
+        lines="resources/automatic/lines.parquet",
+        links="resources/automatic/links.parquet",
+        buses="resources/automatic/buses.parquet",
         shapes_onshore="resources/user/shapes_onshore.geojson",
         shapes_offshore="resources/user/shapes_offshore.geojson",
     output:

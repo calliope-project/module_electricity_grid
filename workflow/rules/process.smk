@@ -6,10 +6,10 @@ rule prepare_lines_links_buses:
         shapes_onshore="resources/user/shapes_onshore.geojson",
         shapes_offshore="resources/user/shapes_offshore.geojson",
     output:
-        lines="results/lines.parquet",
-        links="results/links.parquet",
-        buses="results/buses.parquet",
-        plot="results/electricity_grid.png"
+        lines="resources/automatic/lines.parquet",
+        links="resources/automatic/links.parquet",
+        buses="resources/automatic/buses.parquet",
+        plot="resources/automatic/electricity_grid.png"
     log:
         "logs/prepare_lines_links_buses.log",
     conda:
