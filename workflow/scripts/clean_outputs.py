@@ -84,11 +84,6 @@ def main(
     links["bus0"] = links["bus0"].map(map_buses)
     links["bus1"] = links["bus1"].map(map_buses)
 
-    # add land to bus names
-    lines = clean_lines_or_links(lines)
-    links = clean_lines_or_links(links)
-    buses = clean_buses(buses)
-
     # map shapes to alpha-3
     def country_of_bus(bus):
         return buses.loc[bus, "country"] if bus in buses.index else None
@@ -108,6 +103,11 @@ def main(
 
     columns = ["shape_id", "country_id", "shape_class", "geometry"]
     shapes = shapes[columns]
+
+    # add land to bus names
+    lines = clean_lines_or_links(lines)
+    links = clean_lines_or_links(links)
+    buses = clean_buses(buses)
 
     # Save cleaned data
     lines.to_parquet(path_lines_clean)
