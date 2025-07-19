@@ -36,16 +36,6 @@ def map_to_iso_countries(countries_alpha_2):
     return map_alpha_2_to_alpha_3
 
 
-def clean_lines_or_links(lines_or_links):
-    lines_or_links["bus0"] = lines_or_links["bus0"].apply(lambda x: x + "_land")
-    lines_or_links["bus1"] = lines_or_links["bus1"].apply(lambda x: x + "_land")
-    return lines_or_links
-
-def clean_buses(buses):
-    buses.index = buses.index.map(lambda bus: bus + "_land")
-    return buses
-
-
 def main(
     path_lines,
     path_links,
@@ -103,11 +93,6 @@ def main(
 
     columns = ["shape_id", "country_id", "shape_class", "geometry"]
     shapes = shapes[columns]
-
-    # add land to bus names
-    lines = clean_lines_or_links(lines)
-    links = clean_lines_or_links(links)
-    buses = clean_buses(buses)
 
     # Save cleaned data
     lines.to_parquet(path_lines_clean)
