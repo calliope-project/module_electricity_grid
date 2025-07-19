@@ -86,12 +86,13 @@ def main(
 
     shapes["name"] = shapes["name"].map(map_buses)
     shapes = shapes.rename(columns={"name": "shape_id"})
+    shapes["bus"] = shapes["shape_id"]
     shapes["country_id"] = shapes["shape_id"].map(country_of_bus)
 
     shapes.loc[shapes["shape_class"]=="land","shape_id"] += "_land"
     shapes.loc[shapes["shape_class"]=="maritime","shape_id"] += "_maritime"
 
-    columns = ["shape_id", "country_id", "shape_class", "geometry"]
+    columns = ["shape_id", "country_id", "shape_class", "bus", "geometry"]
     shapes = shapes[columns]
 
     # Save cleaned data
