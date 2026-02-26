@@ -44,10 +44,11 @@ def main(
     path_shapes_offshore,
     path_lines_clean,
     path_links_clean,
-    path_buses_clean,
+    path_nodes_clean,
     path_shapes_clean,
-    path_map_buses,
-    path_map_countries
+    path_map_shapes_to_nodes,
+    path_renamed_nodes,
+    path_renamed_country,
 ):
     # Load the data
     lines = gpd.read_parquet(path_lines)
@@ -74,6 +75,11 @@ def main(
     links["bus0"] = links["bus0"].map(map_buses)
     links["bus1"] = links["bus1"].map(map_buses)
 
+    # rename bus to node
+    lines = lines.rename(columns={"bus0": "node_from", "bus1": "node_to"})
+    links = links.rename(columns={"bus0": "node_from", "bus1": "node_to"})
+    nodes = buses.rename(columns={"bus": "nodes"})
+
     # map shapes to alpha-3
     def country_of_bus(bus):
         return buses.loc[bus, "country"] if bus in buses.index else None
@@ -86,22 +92,28 @@ def main(
 
     shapes["name"] = shapes["name"].map(map_buses)
     shapes = shapes.rename(columns={"name": "shape_id"})
-    shapes["bus"] = shapes["shape_id"]
+    shapes["nodes"] = shapes["shape_id"]
     shapes["country_id"] = shapes["shape_id"].map(country_of_bus)
+
 
     shapes.loc[shapes["shape_class"]=="land","shape_id"] += "_land"
     shapes.loc[shapes["shape_class"]=="maritime","shape_id"] += "_maritime"
 
-    columns = ["shape_id", "country_id", "shape_class", "bus", "geometry"]
+    # prepare map shapes-to-nodes
+    map_shapes_to_nodes = shapes[["shape_id", "nodes"]]
+
+    columns = ["shape_id", "country_id", "shape_class", "geometry"]  # drop 'nodes'
     shapes = shapes[columns]
 
     # Save cleaned data
     lines.to_parquet(path_lines_clean)
     links.to_parquet(path_links_clean)
-    buses.to_parquet(path_buses_clean)
+    nodes.to_parquet(path_nodes_clean)
     shapes.to_parquet(path_shapes_clean)
-    save_yaml(map_buses, path_map_buses)
-    save_yaml(map_countries, path_map_countries)
+    map_shapes_to_nodes.to_parquet(path_map_shapes_to_nodes)
+
+    save_yaml(map_buses, path_renamed_nodes)
+    save_yaml(map_countries, path_renamed_country)
 
 if __name__ == "__main__":
     main(
@@ -112,8 +124,9 @@ if __name__ == "__main__":
         snakemake.input.shapes_offshore,
         snakemake.output.lines,
         snakemake.output.links,
-        snakemake.output.buses,
+        snakemake.output.nodes,
         snakemake.output.shapes,
-        snakemake.output.buses_map,
-        snakemake.output.country_map,
+        snakemake.output.map_shapes_to_nodes,
+        snakemake.output.renamed_nodes,
+        snakemake.output.renamed_country,
     )

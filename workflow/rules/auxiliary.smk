@@ -8,9 +8,10 @@ rule clean_outputs:
     output:
         lines="results/lines_clean.parquet",
         links="results/links_clean.parquet",
-        buses="results/buses_clean.parquet",
+        nodes="results/nodes_clean.parquet",
         shapes="results/shapes_clean.parquet",
-        buses_map="results/buses_map.yaml",
-        country_map="results/country_map.yaml",
+        map_shapes_to_nodes="results/map_shapes_to_nodes.parquet",
+        renamed_nodes="results/renamed_nodes.yaml",
+        renamed_country="results/renamed_country.yaml",
     script:
         "../scripts/clean_outputs.py"
